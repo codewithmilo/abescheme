@@ -15,18 +15,18 @@ Privacy Options:
 -	Track Usage: Yes/No
 -	GPS location: Yes/No
 
-Currently:
+1st Phase:
 
-1.	Create simple form for signups and updating status
+1.	Create simple form for signups - privacy policy and give ID#
 2.	Have a page for displaying profile info
-3.	Database for storing personal information
-4.	Log to console and display to server user policy
+3.	Database for storing personal information - privacy policy
+4.	Client request for posting status or photo
+5.  Server updates stream of posts on user personal page 
 
 2nd Phase:
 
 1.	Implement proper encryption scheme with encryption/decryption
-2.	Store encrypted data in database
-3.	Client request either post status or photo content
-4.	Server must decrypt (showing user policy) to retrieve data
+2.	Store encrypted privacy data in database on creation
+4.	Server must decrypt (showing user policy) to retrieve requested data
 5.	Serve client requests after policy is presented to server
 
