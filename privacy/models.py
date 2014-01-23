@@ -10,3 +10,10 @@ class Policy(models.Model):
 	gps_loc = models.CharField(max_length=100)
 	def __unicode__(self):
 		return self.name
+
+class PostedData(models.Model):
+	p_id = models.CharField(max_length=10)
+	status = models.CharField(max_length=200)
+	posted = models.DateTimeField(auto_now_add=True)
+	def __unicode__(self):
+		return self.status

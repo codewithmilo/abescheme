@@ -1,73 +1,105 @@
-{% if msg %}<div>{{ msg }}</div>{% endif %}
-{% if form.subject.errors %}
-    <ol>
-    {% for error in form.subject.errors %}
-        <li><strong>{{ error|escape }}</strong></li>
-    {% endfor %}
-    </ol>
-{% endif %}
-<form action="{% url 'index' %}" method="post">
-	{% csrf_token %}
-	<table>
-		<tr><td>Full Name:</td><td><input type="text" name="id_name" /></td></tr>
-		<tr><td>Who can view your info?</td>
-			<td><input type="radio" name="viewers" id="0" value="advertisers" />
-				<label>Advertisers</label>
-				<input type="radio" name="viewers" id="1" value="privatesocial" />
-				<label>PrivateSocial.com</label>
-				<input type="radio" name="viewers" id="2" value="onlyme" />
-				<label>Only Me</label>
-			</td></tr>
-		<tr><td>How long are updates shown?</td>
-			<td><input type="radio" name="viewlen" id="0" value="720" />
-				<label>A Month</label>
-				<input type="radio" name="viewlen" id="1" value="168" />
-				<label>A Week</label><br/>
-				<input type="radio" name="viewlen" id="2" value="24" />
-				<label>A Day</label>
-				<input type="radio" name="viewlen" id="3" value="1" />
-				<label>An Hour</label>
-			</td></tr>
-		<tr><td>Can we keep your data after you delete your profile?</td>
-			<td><input type="radio" name="deleted" id="0" value="forever" />
-				<label>Yes</label>
-				<input type="radio" name="deleted" id="1" value="never" />
-				<label>No</label>
-			</td></tr>
-		<tr><td>What can we use your data for?</td>
-			<td>
-				<input type="checkbox" name="datause" id="0" value="ads" />
-				<label>Targeted Advertising</label>
-				<input type="checkbox" name="datause" id="1" value="stats" />
-				<label>Site Statistics</label>
-				<input type="checkbox" name="datause" id="2" value="partner" />
-				<label>Our Partners</label>
-				<input type="checkbox" name="datause" id="3" value="onlyus" />
-				<label>Our Site Functions</label>
-			</td></tr>
-		<tr><td>Can we track how you use the site?</td>
-			<td>
-				<input type="radio" name="track" id="0" value="track" />
-				<label>Yes</label>
-				<input type="radio" name="track" id="1" value="notrack" />
-				<label>No</label>
-			</td></tr>
-		<tr><td>Can we determine your GPS location?</td>
-			<td>
-				<input type="radio" name="gps" id="0" value="locate" />
-				<label>Yes</label>
-				<input type="radio" name="gps" id="1" value="nolocate" />
-				<label>No</label>
-			</td></tr>
-	</table>
-	<input type="submit" class="btn btn-default btn-lg sub" value="Submit Privacy Settings" />
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Encrypted Data Sharing</title>
+	<style type="text/css">
+		table {
+			margin: 0 auto;
+		}
+		div {
+			margin: 0 auto;
+			width: 40%;
+		}
 
-<form action="{% url 'index' %}" method="post">
-	{% csrf_token %}
-	<p>OR Sign In:</p>
-	<label>Your Name:</label><input type="text" name="name" /><br/>
-	<label>Your User ID:</label><input type="text" name="id" /><br/>
-	<input type="submit" class="btn btn-default btn-lg sin" value="Sign In" />
-</form>
+		.signin {
+			margin-top: 5%;
+		}
+		td {
+			border: 1px solid black;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
 
+<div class="signup">
+	{% if msg %}<div>{{ msg }}</div>{% endif %}
+	{% if form.subject.errors %}
+	    <ol>
+	    {% for error in form.subject.errors %}
+	        <li><strong>{{ error|escape }}</strong></li>
+	    {% endfor %}
+	    </ol>
+	{% endif %}
+
+	<form action="{% url 'index' %}" method="post">
+		{% csrf_token %}
+		<table>
+			<tr><td>Full Name:</td><td><input type="text" name="id_name" /></td></tr>
+			<tr><td>Who can view your info?</td>
+				<td><input type="radio" name="viewers" id="0" value="advertisers" />
+					<label>Advertisers</label>
+					<input type="radio" name="viewers" id="1" value="privatesocial" />
+					<label>PrivateSocial.com</label>
+					<input type="radio" name="viewers" id="2" value="onlyme" />
+					<label>Only Me</label>
+				</td></tr>
+			<tr><td>How long are updates shown?</td>
+				<td><input type="radio" name="viewlen" id="0" value="720" />
+					<label>A Month</label>
+					<input type="radio" name="viewlen" id="1" value="168" />
+					<label>A Week</label><br/>
+					<input type="radio" name="viewlen" id="2" value="24" />
+					<label>A Day</label>
+					<input type="radio" name="viewlen" id="3" value="1" />
+					<label>An Hour</label>
+				</td></tr>
+			<tr><td>Can we keep your data after you delete your profile?</td>
+				<td><input type="radio" name="deleted" id="0" value="forever" />
+					<label>Yes</label>
+					<input type="radio" name="deleted" id="1" value="never" />
+					<label>No</label>
+				</td></tr>
+			<tr><td>What can we use your data for?</td>
+				<td>
+					<input type="checkbox" name="datause" id="0" value="ads" />
+					<label>Targeted Ads</label>
+					<input type="checkbox" name="datause" id="1" value="stats" />
+					<label>Site Statistics</label><br/>
+					<input type="checkbox" name="datause" id="2" value="partner" />
+					<label>Our Partners</label>
+					<input type="checkbox" name="datause" id="3" value="onlyus" />
+					<label>Our Site Functions</label>
+				</td></tr>
+			<tr><td>Can we track how you use the site?</td>
+				<td>
+					<input type="radio" name="track" id="0" value="track" />
+					<label>Yes</label>
+					<input type="radio" name="track" id="1" value="notrack" />
+					<label>No</label>
+				</td></tr>
+			<tr><td>Can we determine your GPS location?</td>
+				<td>
+					<input type="radio" name="gps" id="0" value="locate" />
+					<label>Yes</label>
+					<input type="radio" name="gps" id="1" value="nolocate" />
+					<label>No</label>
+				</td></tr>
+		</table><br/>
+		<input type="submit" class="btn btn-default btn-lg sub" value="Submit Privacy Settings"/>
+	</form>
+</div>
+
+<div class="signin">
+	<form action="{% url 'index' %}" method="post">
+		{% csrf_token %}
+		<p>OR Sign In:</p>
+		<label>Your Name:</label><input type="text" name="name" /><br/>
+		<label>Your User ID:</label><input type="text" name="id" /><br/>
+		<input type="submit" value="Sign In" />
+	</form>
+</div>
+
+</body>
+</html>

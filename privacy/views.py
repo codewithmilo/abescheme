@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from privacy.models import Policy
+from privacy.models import Policy, PostedData
 import form
 
 def index(request):
@@ -36,5 +36,27 @@ def index(request):
 	return render(request, 'index.html', {'form': form.PolicyForm()})
 
 def policy(request, p_id):
-	context = p_id
-	return HttpResponse("Here's the id: %s" % p_id)
+	user = Policy.objects.get(pk=int(p_id))
+	if request.method == 'POST':
+		content = request.POST.get('status', False)
+		if content:
+			p = PostedData(p_id=int(p_id), status=content)
+			p.save()
+			return HttpResponseRedirect('')
+		else:
+			return render(request, 'policy.html', {'msg': 'You didn\'t enter a status. Please try again.', 'id': p_id, 'name': user.name})
+
+	statuses = PostedData.objects.filter(p_id=int(p_id))
+	context = {'statuses': statuses, 'id': p_id, 'name': user.name}		
+	return render(request, 'policy.html', context)
+
+
+
+
+
+
+
+
+
+
+
