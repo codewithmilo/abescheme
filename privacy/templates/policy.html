@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Encrypted Data Sharing - {{ name }}</title>
+	<style type="text/css">
+		h3, p {
+			margin: 0 auto;
+		}
+	</style>
+</head>
+<body>
+	<h3>Welcome, {{ name }}! Your ID number is {{ id }}. Use this to log in next time.</h3>
+	<p>You can post your status, or upload a photo. Remember, your data is super safe!<p>
+	<p><a href="{% url 'index' %}">Back to home</a></p>
+	<br/><br/><br/>
+	<h3>Post a status update:</h3>
+	<form action="{% url 'policy' id %}" method="post">
+		{% csrf_token %}
+		<textarea rows="2" cols="30" name="status"></textarea>
+		<input type="submit" value="Update" />
+	</form>
+
+	{% if statuses %}
+	{% for status in statuses %}
+	<div class="time"><p>{{ status.posted }}</p></div>
+	<div class="status"><p>{{ status.status }}</p></div><br/>
+	{% endfor %}
+	{% endif %}
+</body>
+</html>
