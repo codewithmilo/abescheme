@@ -50,7 +50,13 @@ def policy(request, p_id):
 	context = {'statuses': statuses, 'id': p_id, 'name': user.name}		
 	return render(request, 'policy.html', context)
 
+def authority(request):
+	if (request.is_ajax()):
+		policy = request.GET.get('policy', False)
+		attr_list = request.GET.get('attr_list', False)
+		if (policy and attr_list):
 
+	return render(request, 'authority.html');
 
 
 

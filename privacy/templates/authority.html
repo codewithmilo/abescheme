@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Data Encryption Authority</title>
+	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var policy_string = "";
+			var attr_list = [];
+
+			$('#Lparen').on("click", function(){
+				policy_string += "(";
+				$('#currentview').html(policy_string);
+			});
+
+			$('#Rparen').on("click", function(){
+				var string = $('#attr').val();
+				if(string != "") attr_list.push(string);
+				string += ")";
+				policy_string += string;
+				$('#currentview').html(policy_string);
+				$('#attr').val("");
+			});
+
+			$('#or').on("click", function(){
+				var string = $('#attr').val();
+				if(string != "") attr_list.push(string);
+				string += " or ";
+				policy_string += string;
+				$('#currentview').html(policy_string);
+				$('#attr').val("");
+			});
+
+			$('#and').on("click", function(){
+				var string = $('#attr').val();
+				if(string != "") attr_list.push(string);
+				string += " and ";
+				policy_string += string;
+				$('#currentview').html(policy_string);
+				$('#attr').val("");
+			});
+
+			$('#submit').on("click", function(){
+				$.ajax({
+					url: '/authority/',
+					type: 'GET',
+					data: {policy: policy_string, list: attr_list}
+				});
+			})
+		});
+	</script>
+</head>
+<body>
+	<h1 style="text-align: center;">Data Encryption Authority</h1>
+	<br/><br/>
+	<div style="text-align:center;">
+		<p id="currentview"></p>
+		<input type="text" id="attr" /><br/>
+		<br/>
+		<input type="button" value="(" id="Lparen" />
+		<input type="button" value="OR" id="or" />
+		<input type="button" value="AND" id="and" />
+		<input type="button" value=")" id="Rparen" />
+		<br/>
+		<input type="button" value="GET KEY" id="submit" />
+	</div>
+</body>
+</html>

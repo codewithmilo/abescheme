@@ -17,3 +17,11 @@ class PostedData(models.Model):
 	posted = models.DateTimeField(auto_now_add=True)
 	def __unicode__(self):
 		return self.status
+
+class Authority(modelsModel):
+	app_name = models.CharField(max_length=100)
+	pk = models.CharField(max_length=5000)
+	mk = models.CharField(max_length=5000)
+	attr_list = models.CharField(max_length=1000)
+	def __unicode__(self):
+		return self.app_name
