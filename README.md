@@ -1,5 +1,7 @@
 Attribute-Based Encryption for Expressing Client Privacy Options
 
+Accessible at [privatebook.herokuapp.com](http://privatebook.herokuapp.com)
+
 Prototype: Social networking site with page profiles, options to upload info and status updates, and clients select specific sharing/privacy options. 
 -	Collect and encrypt data with public keys with Javascript on page
 -	Send AJAX request and send encrypted data to server
