@@ -6,6 +6,7 @@
 	<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			$.ajaxSettings.traditional = true;
 			var policy_string = "";
 			var attr_list = [];
 
@@ -42,10 +43,16 @@
 			});
 
 			$('#submit').on("click", function(){
+				console.log(attr_list.toString());
+				var name = $('#name').val();
+				var attr_serial = 
 				$.ajax({
 					url: '/authority/',
 					type: 'GET',
-					data: {policy: policy_string, list: attr_list}
+					data: {name: name, policy: policy_string, list: attr_list},
+					success: function(response){ 
+						window.location.reload();
+					}
 				});
 			})
 		});
@@ -54,8 +61,10 @@
 <body>
 	<h1 style="text-align: center;">Data Encryption Authority</h1>
 	<br/><br/>
+	{% if msg %}<p>{{ msg }}</p>{% endif %}
 	<div style="text-align:center;">
 		<p id="currentview"></p>
+		<input type="text" id="name" /></br/>
 		<input type="text" id="attr" /><br/>
 		<br/>
 		<input type="button" value="(" id="Lparen" />

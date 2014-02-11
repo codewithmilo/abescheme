@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from privacy.models import Policy, PostedData
+from privacy.models import Policy, PostedData, Authority
 import form
+
+global pk
+global policy
 
 def index(request):
 	if request.method == 'POST':
 		p_id = request.POST.get('id', False)
-		print p_id
 		if p_id:
 			name = request.POST.get('name', "")
 			user = Policy.objects.get(pk=int(p_id))
@@ -23,7 +25,6 @@ def index(request):
 			datause = request.POST.getlist('datause', False)
 			tracking = request.POST.get('track', False)
 			gps = request.POST.get('gps', False)
-			print name, view, displen, delete, datause, tracking, gps
 			if name and view and displen and delete and datause and tracking and gps:
 				p = Policy(name=name, viewers=view, display_length=displen, deleted_length=delete, data_use=datause, tracking=tracking, gps_loc=gps)
 				p.save()
@@ -52,11 +53,23 @@ def policy(request, p_id):
 
 def authority(request):
 	if (request.is_ajax()):
+		name = request.GET.get('name', False)
 		policy = request.GET.get('policy', False)
-		attr_list = request.GET.get('attr_list', False)
-		if (policy and attr_list):
-
-	return render(request, 'authority.html');
+		attr_list = request.GET.getlist('list', False)
+		print name, policy, attr_list
+		if name and policy and attr_list:
+			pk = 1234567890
+			mk = 987654321
+			a = Authority(app_name=name, pk=pk, mk=mk, attr_list=attr_list)
+			a.save()
+			print pk, mk, name, policy
+			msg = 'Success!'
+			return render(request, 'authority.html', {'msg': msg})
+		else:
+			msg = 'Failed.'
+			return render(request, 'authority.html', {'msg': msg})
+	else:
+		return render(request, 'authority.html');
 
 
 

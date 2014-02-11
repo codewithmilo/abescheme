@@ -18,7 +18,7 @@ class PostedData(models.Model):
 	def __unicode__(self):
 		return self.status
 
-class Authority(modelsModel):
+class Authority(models.Model):
 	app_name = models.CharField(max_length=100)
 	pk = models.CharField(max_length=5000)
 	mk = models.CharField(max_length=5000)
