@@ -45,14 +45,16 @@
 			$('#submit').on("click", function(){
 				console.log(attr_list.toString());
 				var name = $('#name').val();
-				var attr_serial = 
+				$.get('', {name: name, policy: policy_string, list: attr_list}, function(json_response){
+        			$('#message').html(json_response.msg);
+				});
 				$.ajax({
 					url: '/authority/',
 					type: 'GET',
 					data: {name: name, policy: policy_string, list: attr_list},
-					success: function(response){ 
-						window.location.reload();
-					}
+					// success: function(response){ 
+					// 	window.location.reload();
+					// }
 				});
 			})
 		});
@@ -61,7 +63,7 @@
 <body>
 	<h1 style="text-align: center;">Data Encryption Authority</h1>
 	<br/><br/>
-	{% if msg %}<p>{{ msg }}</p>{% endif %}
+	<p id="message" style="align:center;"></p>
 	<div style="text-align:center;">
 		<p id="currentview"></p>
 		<input type="text" id="name" /></br/>

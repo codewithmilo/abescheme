@@ -2,16 +2,26 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from privacy.models import Policy, PostedData, Authority
 import form
+from Charm.charm.adapters import abenc_adapt_hybrid as charm
+from django.core.exceptions import ObjectDoesNotExist
+import json
 
-global pk
-global policy
+global groupObj
+global cpabe
+global hyb_abe
+groupObj = charm.PairingGroup('SS512')
+cpabe = charm.CPabe_BSW07(groupObj)
+hyb_abe = charm.HybridABEnc(cpabe, groupObj)
 
 def index(request):
 	if request.method == 'POST':
 		p_id = request.POST.get('id', False)
 		if p_id:
 			name = request.POST.get('name', "")
-			user = Policy.objects.get(pk=int(p_id))
+			try:
+				user = Five.objects.get(name=username)
+			except ObjectDoesNotExist:
+				user = False
 			if user.name == name:
 				return HttpResponseRedirect(p_id)
 			else:
@@ -40,14 +50,24 @@ def policy(request, p_id):
 	user = Policy.objects.get(pk=int(p_id))
 	if request.method == 'POST':
 		content = request.POST.get('status', False)
+		appname = "private"
 		if content:
-			p = PostedData(p_id=int(p_id), status=content)
-			p.save()
+			try:
+				auth = Authority.objects.get(app_name=appname)
+			except ObjectDoesNotExist:
+				auth = False
+			if auth:
+				encrypt = hyb_abe.encrypt(auth.p_key, content, auth.policy)
+				p = PostedData(p_id=int(p_id), status=encrypt)
+				p.save()
+			else:
+				return render(request, 'policy.html', {'msg': 'The authority has not created any keys for you to encrypt your data!', 'id': p_id, 'name': user.name})
 			return HttpResponseRedirect('')
 		else:
 			return render(request, 'policy.html', {'msg': 'You didn\'t enter a status. Please try again.', 'id': p_id, 'name': user.name})
 
 	statuses = PostedData.objects.filter(p_id=int(p_id))
+	print type(statuses)
 	context = {'statuses': statuses, 'id': p_id, 'name': user.name}		
 	return render(request, 'policy.html', context)
 
@@ -56,20 +76,23 @@ def authority(request):
 		name = request.GET.get('name', False)
 		policy = request.GET.get('policy', False)
 		attr_list = request.GET.getlist('list', False)
+		attr_list = [x.encode('UTF8') for x in attr_list]
 		print name, policy, attr_list
 		if name and policy and attr_list:
-			pk = 1234567890
-			mk = 987654321
-			a = Authority(app_name=name, pk=pk, mk=mk, attr_list=attr_list)
-			a.save()
-			print pk, mk, name, policy
-			msg = 'Success!'
-			return render(request, 'authority.html', {'msg': msg})
+			(private, master) = hyb_abe.setup()
+			D_key = hyb_abe.keygen(private, master, attr_list)
+			try:
+				a = Authority.objects.get(app_name=name)
+			except ObjectDoesNotExist:
+				a = Authority(app_name=name, attr_list=attr_list, p_key=private, d_key=D_key, policy=policy)
+				a.save()
+			json_res = {'msg': 'Success!'}
 		else:
-			msg = 'Failed.'
-			return render(request, 'authority.html', {'msg': msg})
-	else:
-		return render(request, 'authority.html');
+			json_res = {'msg': 'Failure.'}
+
+		return HttpResponse(json.dumps(json_res), content_type='application/json')
+
+	return render(request, 'authority.html');
 
 
 

@@ -1,0 +1,2 @@
+setuptools
+pyparsing >= 1.5.5
