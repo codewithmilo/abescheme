@@ -14,6 +14,7 @@
 	<p>You can post your status, or upload a photo. Remember, your data is super safe!<p>
 	<p><a href="{% url 'index' %}">Back to home</a></p>
 	<br/><br/><br/>
+	{% if msg %}<p>{{ msg }}</p>{% endif %}
 	<h3>Post a status update:</h3>
 	<form action="{% url 'policy' id %}" method="post">
 		{% csrf_token %}

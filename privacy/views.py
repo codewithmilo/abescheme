@@ -5,6 +5,7 @@ import form
 from Charm.charm.adapters import abenc_adapt_hybrid as charm
 from django.core.exceptions import ObjectDoesNotExist
 import json
+import ast
 
 global groupObj
 global cpabe
@@ -48,15 +49,20 @@ def index(request):
 
 def policy(request, p_id):
 	user = Policy.objects.get(pk=int(p_id))
+	appname = "private"
 	if request.method == 'POST':
 		content = request.POST.get('status', False)
-		appname = "private"
 		if content:
 			try:
 				auth = Authority.objects.get(app_name=appname)
 			except ObjectDoesNotExist:
 				auth = False
 			if auth:
+				print type(auth.p_key), type(content), type(auth.policy)
+				privatekey = eval(auth.p_key)
+				msg = repr(content)
+				pol = repr(auth.policy)
+				print type(auth.privatekey), type(msg), type(pol)
 				encrypt = hyb_abe.encrypt(auth.p_key, content, auth.policy)
 				p = PostedData(p_id=int(p_id), status=encrypt)
 				p.save()
@@ -66,9 +72,20 @@ def policy(request, p_id):
 		else:
 			return render(request, 'policy.html', {'msg': 'You didn\'t enter a status. Please try again.', 'id': p_id, 'name': user.name})
 
-	statuses = PostedData.objects.filter(p_id=int(p_id))
-	print type(statuses)
-	context = {'statuses': statuses, 'id': p_id, 'name': user.name}		
+	try:
+		auth = Authority.objects.get(app_name=appname)
+	except ObjectDoesNotExist:
+		auth = False
+	if auth:
+		statuses_decrypted = []
+		statuses = PostedData.objects.filter(p_id=int(p_id))
+		for s in statuses:
+			print s.status
+			#statuses_decrypted.append(hyb_abe.decrypt(auth.p_key, auth.d_key, s.status))
+	if statuses_decrypted:
+		context = {'statuses': statuses_decrypted, 'id': p_id, 'name': user.name}
+	else:
+		context = {'msg': 'Your statuses could not be displayed due to lack of Authority.', 'id': p_id, 'name': user.name}		
 	return render(request, 'policy.html', context)
 
 def authority(request):
@@ -84,7 +101,7 @@ def authority(request):
 			try:
 				a = Authority.objects.get(app_name=name)
 			except ObjectDoesNotExist:
-				a = Authority(app_name=name, attr_list=attr_list, p_key=private, d_key=D_key, policy=policy)
+				a = Authority(app_name=name, attr_list=attr_list, p_key=repr(private), d_key=repr(D_key), policy=repr(policy))
 				a.save()
 			json_res = {'msg': 'Success!'}
 		else:
