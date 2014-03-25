@@ -44,7 +44,9 @@ class HybridABEnc(ABEnc):
     def decrypt(self, pk, sk, ct):
         c1, c2 = ct['c1'], ct['c2']
         key = abenc.decrypt(pk, sk, c1)
+        print type(key), key
         cipher = AuthenticatedCryptoAbstraction(sha1(key))
+        print cipher
         return cipher.decrypt(c2)
     
 def main():
@@ -52,7 +54,7 @@ def main():
     cpabe = CPabe_BSW07(groupObj)
     hyb_abe = HybridABEnc(cpabe, groupObj)
     access_policy = '((four or three) and (two or one))'
-    message = b"hello world this is an important message."
+    message = "hello world this is an important message."
     (pk, mk) = hyb_abe.setup()
     if debug: print("pk => ", pk)
     if debug: print("mk => ", mk)

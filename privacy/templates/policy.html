@@ -23,10 +23,10 @@
 	</form>
 
 	{% if statuses %}
-	{% for status in statuses %}
-	<div class="time"><p>{{ status.posted }}</p></div>
-	<div class="status"><p>{{ status.status }}</p></div><br/>
-	{% endfor %}
+		{% for status in statuses %}
+		<div class="time"><p>{{ status.posted }}</p></div>
+		<div class="status"><p>{{ status.status }}</p></div><br/>
+		{% endfor %}
 	{% endif %}
 </body>
 </html>

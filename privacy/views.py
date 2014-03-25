@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from privacy.models import Policy, PostedData, Authority
-import form
 from Charm.charm.adapters import abenc_adapt_hybrid as charm
+from charm.core.engine.util import objectToBytes,bytesToObject
 from django.core.exceptions import ObjectDoesNotExist
+import form
 import json
-import ast
 
 global groupObj
 global cpabe
@@ -49,7 +49,8 @@ def index(request):
 
 def policy(request, p_id):
 	user = Policy.objects.get(pk=int(p_id))
-	appname = "private"
+	appname = "privateBook"
+	statuses_decrypted = []
 	if request.method == 'POST':
 		content = request.POST.get('status', False)
 		if content:
@@ -58,13 +59,13 @@ def policy(request, p_id):
 			except ObjectDoesNotExist:
 				auth = False
 			if auth:
-				print type(auth.p_key), type(content), type(auth.policy)
-				privatekey = eval(auth.p_key)
-				msg = repr(content)
-				pol = repr(auth.policy)
-				print type(auth.privatekey), type(msg), type(pol)
-				encrypt = hyb_abe.encrypt(auth.p_key, content, auth.policy)
-				p = PostedData(p_id=int(p_id), status=encrypt)
+				private = bytesToObject(auth.p_key, groupObj)
+				decoder = bytesToObject(auth.d_key, groupObj)
+				print content, auth.policy
+				encrypt = hyb_abe.encrypt(private, str(content), str(auth.policy))
+				print encrypt
+				encrypt_b = objectToBytes(encrypt, groupObj)
+				p = PostedData(p_id=int(p_id), status=encrypt_b)
 				p.save()
 			else:
 				return render(request, 'policy.html', {'msg': 'The authority has not created any keys for you to encrypt your data!', 'id': p_id, 'name': user.name})
@@ -77,11 +78,16 @@ def policy(request, p_id):
 	except ObjectDoesNotExist:
 		auth = False
 	if auth:
-		statuses_decrypted = []
 		statuses = PostedData.objects.filter(p_id=int(p_id))
 		for s in statuses:
 			print s.status
-			#statuses_decrypted.append(hyb_abe.decrypt(auth.p_key, auth.d_key, s.status))
+			status_cipher = bytesToObject(s.status, groupObj)
+			print status_cipher
+			private = bytesToObject(auth.p_key, groupObj)
+			decoder = bytesToObject(auth.d_key, groupObj)
+			# make a pair (status, time) to add to the list, then change policy.html
+			statuses_decrypted.append(hyb_abe.decrypt(private, decoder, status_cipher))
+			print statuses_decrypted
 	if statuses_decrypted:
 		context = {'statuses': statuses_decrypted, 'id': p_id, 'name': user.name}
 	else:
@@ -97,11 +103,14 @@ def authority(request):
 		print name, policy, attr_list
 		if name and policy and attr_list:
 			(private, master) = hyb_abe.setup()
-			D_key = hyb_abe.keygen(private, master, attr_list)
+			print attr_list
+			decoder = hyb_abe.keygen(private, master, attr_list)
+			decoder_b = objectToBytes(decoder, groupObj)
+			private_b = objectToBytes(private, groupObj)
 			try:
 				a = Authority.objects.get(app_name=name)
 			except ObjectDoesNotExist:
-				a = Authority(app_name=name, attr_list=attr_list, p_key=repr(private), d_key=repr(D_key), policy=repr(policy))
+				a = Authority(app_name=name, attr_list=attr_list, policy=policy, p_key=private_b, d_key=decoder_b)
 				a.save()
 			json_res = {'msg': 'Success!'}
 		else:
@@ -110,12 +119,4 @@ def authority(request):
 		return HttpResponse(json.dumps(json_res), content_type='application/json')
 
 	return render(request, 'authority.html');
-
-
-
-
-
-
-
-
 

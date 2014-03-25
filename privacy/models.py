@@ -13,7 +13,7 @@ class Policy(models.Model):
 
 class PostedData(models.Model):
 	p_id = models.CharField(max_length=10)
-	status = models.CharField(max_length=200)
+	status = models.CharField(max_length=1000)
 	posted = models.DateTimeField(auto_now_add=True)
 	def __unicode__(self):
 		return self.status
@@ -21,8 +21,8 @@ class PostedData(models.Model):
 class Authority(models.Model):
 	app_name = models.CharField(max_length=100)
 	attr_list = models.CharField(max_length=1000)
+	policy = models.CharField(max_length=1000)
 	p_key = models.CharField(max_length=1000)
 	d_key = models.CharField(max_length=1000)
-	policy = models.CharField(max_length=1000)
 	def __unicode__(self):
 		return self.app_name
