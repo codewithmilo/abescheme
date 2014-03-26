@@ -37,7 +37,36 @@ def index(request):
 			tracking = request.POST.get('track', False)
 			gps = request.POST.get('gps', False)
 			if name and view and displen and delete and datause and tracking and gps:
-				p = Policy(name=name, viewers=view, display_length=displen, deleted_length=delete, data_use=datause, tracking=tracking, gps_loc=gps)
+				policy_str = ""
+				if view == "ADS":
+					policy_str += "(ADS or PVB or ME) and "
+				elif view == "PVB":
+					policy_str += "(PVB or ME) and "
+				else:
+					policy_str += "ME and "
+				
+				if displen == "720":
+					policy_str += "(720 or 168 or 24 or 1) and "
+				elif displen == "168":
+					policy_str += "(168 or 24 or 1) and "
+				elif displen == "24":
+					policy_str += "(24 or 1) and "
+				else:
+					policy_str += "1 and "
+
+				if datause == "TARGET":
+					policy_str += "(TARGET or STATS or PARTNER or SITE) and "
+				elif datause == "PARTNER":
+					policy_str += "(STATS or PARTNER or SITE) and "
+				elif datause == "STATS":
+					policy_str += "(STATS or SITE) and "
+				else:
+					policy_str += "SITE and "
+
+				policy_str = policy_str + delete + " and " + tracking + " and " + gps 
+				print policy_str
+
+				p = Policy(name=name, policy=policy_str)
 				p.save()
 				new_user = Policy.objects.get(name=name)
 				p_id = new_user.id
@@ -62,7 +91,7 @@ def policy(request, p_id):
 				private = bytesToObject(auth.p_key, groupObj)
 				decoder = bytesToObject(auth.d_key, groupObj)
 				print content, auth.policy
-				encrypt = hyb_abe.encrypt(private, str(content), str(auth.policy))
+				encrypt = hyb_abe.encrypt(private, str(content), str(user.policy))
 				print encrypt
 				encrypt_b = objectToBytes(encrypt, groupObj)
 				p = PostedData(p_id=int(p_id), status=encrypt_b)
@@ -85,8 +114,11 @@ def policy(request, p_id):
 			print status_cipher
 			private = bytesToObject(auth.p_key, groupObj)
 			decoder = bytesToObject(auth.d_key, groupObj)
-			# make a pair (status, time) to add to the list, then change policy.html
-			statuses_decrypted.append(hyb_abe.decrypt(private, decoder, status_cipher))
+			try:
+				status_pair = (hyb_abe.decrypt(private, decoder, status_cipher), s.posted)
+			except:
+				status_pair = ("Your status could not be displayed: incorrect decryption key", s.posted)
+			statuses_decrypted.append(status_pair)
 			print statuses_decrypted
 	if statuses_decrypted:
 		context = {'statuses': statuses_decrypted, 'id': p_id, 'name': user.name}
@@ -96,14 +128,13 @@ def policy(request, p_id):
 
 def authority(request):
 	if (request.is_ajax()):
-		name = request.GET.get('name', False)
-		policy = request.GET.get('policy', False)
-		attr_list = request.GET.getlist('list', False)
-		attr_list = [x.encode('UTF8') for x in attr_list]
-		print name, policy, attr_list
-		if name and policy and attr_list:
+		name = "privateBook"
+		#attr_list = request.GET.get('list', False)
+		attr_list = ['ADS', '720', 'KEEP', 'TARGET', 'TRACK', 'NOLOCATE']
+		# attr_list = [x.encode('UTF8') for x in attr_list]
+		print name, attr_list
+		if name and attr_list:
 			(private, master) = hyb_abe.setup()
-			print attr_list
 			decoder = hyb_abe.keygen(private, master, attr_list)
 			decoder_b = objectToBytes(decoder, groupObj)
 			private_b = objectToBytes(private, groupObj)

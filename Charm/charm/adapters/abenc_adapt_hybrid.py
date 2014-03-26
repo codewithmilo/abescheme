@@ -53,7 +53,7 @@ def main():
     groupObj = PairingGroup('SS512')
     cpabe = CPabe_BSW07(groupObj)
     hyb_abe = HybridABEnc(cpabe, groupObj)
-    access_policy = '((four or three) and (two or one))'
+    access_policy = "((four or three) and (two or one))"
     message = "hello world this is an important message."
     (pk, mk) = hyb_abe.setup()
     if debug: print("pk => ", pk)

@@ -21,11 +21,11 @@
 		<textarea rows="2" cols="30" name="status"></textarea>
 		<input type="submit" value="Update" />
 	</form>
-
+	<br/><br/>
 	{% if statuses %}
 		{% for status in statuses %}
-		<div class="time"><p>{{ status.posted }}</p></div>
-		<div class="status"><p>{{ status.status }}</p></div><br/>
+		<div class="time"><p>{{ status.1 }}</p></div>
+		<div class="status"><p>{{ status.0 }}</p></div><br/>
 		{% endfor %}
 	{% endif %}
 </body>

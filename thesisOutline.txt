@@ -1,0 +1,9 @@
+1. Developing options for protecting user privacy
+	- NYT article
+	- Jeeves PL, from Jean Yang
+2. Attribute Based Encryption - how it works/how I use it
+	- ABE paper: mathematics
+	- ABE paper: example usage
+	- Implementation: Policy diagram
+	- Implementation: Authority/Policy/Data posting
+	- Implementation: Demonstration – success & failure

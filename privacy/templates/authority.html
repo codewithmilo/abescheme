@@ -7,51 +7,27 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$.ajaxSettings.traditional = true;
-			var policy_string = "";
+			var list_string = ""
 			var attr_list = [];
 
-			$('#Lparen').on("click", function(){
-				policy_string += "(";
-				$('#currentview').html(policy_string);
-			});
-
-			$('#Rparen').on("click", function(){
+			$('#add').on("click", function(){
 				var string = $('#attr').val();
 				if(string != "") attr_list.push(string);
-				string += ")";
-				policy_string += string;
-				$('#currentview').html(policy_string);
+				list_string = list_string + string + ", ";
+				$('#currentview').html(list_string);
 				$('#attr').val("");
-			});
-
-			$('#or').on("click", function(){
-				var string = $('#attr').val();
-				if(string != "") attr_list.push(string);
-				string += " or ";
-				policy_string += string;
-				$('#currentview').html(policy_string);
-				$('#attr').val("");
-			});
-
-			$('#and').on("click", function(){
-				var string = $('#attr').val();
-				if(string != "") attr_list.push(string);
-				string += " and ";
-				policy_string += string;
-				$('#currentview').html(policy_string);
-				$('#attr').val("");
-			});
+			})
 
 			$('#submit').on("click", function(){
 				console.log(attr_list.toString());
 				var name = $('#name').val();
-				$.get('', {name: name, policy: policy_string, list: attr_list}, function(json_response){
+				$.get('', {name: name, list: attr_list}, function(json_response){
         			$('#message').html(json_response.msg);
 				});
 				$.ajax({
 					url: '/authority/',
 					type: 'GET',
-					data: {name: name, policy: policy_string, list: attr_list},
+					data: {name: name, list: attr_list},
 					// success: function(response){ 
 					// 	window.location.reload();
 					// }
@@ -62,6 +38,7 @@
 </head>
 <body>
 	<h1 style="text-align: center;">Data Encryption Authority</h1>
+	<h2 style="text-align: center;">Build your app's attribute list here</h2>
 	<br/><br/>
 	<p id="message" style="align:center;"></p>
 	<div style="text-align:center;">
@@ -69,10 +46,7 @@
 		<input type="text" id="name" /></br/>
 		<input type="text" id="attr" /><br/>
 		<br/>
-		<input type="button" value="(" id="Lparen" />
-		<input type="button" value="OR" id="or" />
-		<input type="button" value="AND" id="and" />
-		<input type="button" value=")" id="Rparen" />
+		<input type="button" value="ADD" id="add" />
 		<br/>
 		<input type="button" value="GET KEY" id="submit" />
 	</div>
