@@ -53,12 +53,13 @@ def main():
     groupObj = PairingGroup('SS512')
     cpabe = CPabe_BSW07(groupObj)
     hyb_abe = HybridABEnc(cpabe, groupObj)
-    access_policy = "((four or three) and (two or one))"
+    #access_policy = "((ADS or PVB or ME) and (720 or 168 or 24 or 1) and (SITE) and (KEEP) and (TRACK) and (LOCATE))"
+    access_policy = "(ADS or PVB or ME) and (720 or 168 or 24 or 1) and SITE"
     message = "hello world this is an important message."
     (pk, mk) = hyb_abe.setup()
     if debug: print("pk => ", pk)
     if debug: print("mk => ", mk)
-    sk = hyb_abe.keygen(pk, mk, ['ONE', 'TWO', 'THREE'])
+    sk = hyb_abe.keygen(pk, mk, ['ADS', '720', 'KEEP', 'TARGET', 'TRACK', 'NOLOCATE'])
     if debug: print("sk => ", sk)
     ct = hyb_abe.encrypt(pk, message, access_policy)
     mdec = hyb_abe.decrypt(pk, sk, ct)

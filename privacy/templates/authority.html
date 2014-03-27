@@ -13,6 +13,7 @@
 			$('#add').on("click", function(){
 				var string = $('#attr').val();
 				if(string != "") attr_list.push(string);
+				console.log(attr_list);
 				list_string = list_string + string + ", ";
 				$('#currentview').html(list_string);
 				$('#attr').val("");

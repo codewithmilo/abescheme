@@ -38,7 +38,7 @@
 		<table>
 			<tr><td>Full Name:</td><td><input type="text" name="id_name" /></td></tr>
 			<tr><td>Who can view your info?</td>
-				<td><input type="radio" name="viewers" id="0" value="ADS" />
+				<td><input type="radio" name="viewers" id="0" value="ADS" checked/>
 					<label>Advertisers</label>
 					<input type="radio" name="viewers" id="1" value="PVB" />
 					<label>PrivateBook</label>
@@ -46,7 +46,7 @@
 					<label>Only Me</label>
 				</td></tr>
 			<tr><td>How long are your updates shown?</td>
-				<td><input type="radio" name="viewlen" id="0" value="720" />
+				<td><input type="radio" name="viewlen" id="0" value="720" checked/>
 					<label>A Month</label>
 					<input type="radio" name="viewlen" id="1" value="168" />
 					<label>A Week</label><br/>
@@ -56,14 +56,14 @@
 					<label>An Hour</label>
 				</td></tr>
 			<tr><td>Can we keep your data after you delete your profile?</td>
-				<td><input type="radio" name="deleted" id="0" value="KEEP" />
+				<td><input type="radio" name="deleted" id="0" value="KEEP" checked/>
 					<label>Yes</label>
-					<input type="radio" name="deleted" id="1" value="DELETE" />
+					<input type="radio" name="deleted" id="1" value="DELETED" />
 					<label>No</label>
 				</td></tr>
 			<tr><td>What can we use your data for?</td>
 				<td>
-					<input type="radio" name="datause" id="0" value="TARGET" />
+					<input type="radio" name="datause" id="0" value="TARGET" checked/>
 					<label>Targeted Ads</label>
 					<input type="radio" name="datause" id="1" value="STATS" />
 					<label>Site Statistics</label><br/>
@@ -74,7 +74,7 @@
 				</td></tr>
 			<tr><td>Can we track how you use the site?</td>
 				<td>
-					<input type="radio" name="track" id="0" value="TRACK" />
+					<input type="radio" name="track" id="0" value="TRACK" checked/>
 					<label>Yes</label>
 					<input type="radio" name="track" id="1" value="NOTRACK" />
 					<label>No</label>
@@ -83,7 +83,7 @@
 				<td>
 					<input type="radio" name="gps" id="0" value="LOCATE" />
 					<label>Yes</label>
-					<input type="radio" name="gps" id="1" value="NOLOCATE" />
+					<input type="radio" name="gps" id="1" value="NOLOCATE" checked/>
 					<label>No</label>
 				</td></tr>
 		</table><br/>

@@ -1,4 +1,5 @@
 1. Developing options for protecting user privacy
+	- Example of service where this implementation would be useful
 	- NYT article
 	- Jeeves PL, from Jean Yang
 2. Attribute Based Encryption - how it works/how I use it
