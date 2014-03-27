@@ -33,7 +33,7 @@ def index(request):
 			view = request.POST.get('viewers', False)
 			displen = request.POST.get('viewlen', False)
 			delete = request.POST.get('deleted', False)
-			datause = request.POST.getlist('datause', False)
+			datause = request.POST.get('datause', False)
 			tracking = request.POST.get('track', False)
 			gps = request.POST.get('gps', False)
 			if name and view and displen and delete and datause and tracking and gps:
