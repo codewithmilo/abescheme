@@ -20,7 +20,7 @@ def index(request):
 		if p_id:
 			name = request.POST.get('name', "")
 			try:
-				user = Five.objects.get(name=username)
+				user = Policy.objects.get(name=name)
 			except ObjectDoesNotExist:
 				user = False
 			if user.name == name:
@@ -63,7 +63,7 @@ def index(request):
 				else:
 					policy_str += "(SITE) and "
 
-				if delete == "DELETED":
+				if delete == "KEEP":
 					policy_str += "(DELETED OR KEEP) and "
 				else:
 					policy_str += "(KEEP) and "
@@ -78,7 +78,8 @@ def index(request):
 				else:
 					policy_str += "(NOLOCATE)"
 
-				policy_str += ")" 
+				policy_str += ")"
+				print "The user policy is:"
 				print policy_str
 
 				p = Policy(name=name, policy=policy_str)
@@ -107,7 +108,11 @@ def policy(request, p_id):
 				decoder = bytesToObject(auth.d_key, groupObj)
 				print content, user.policy
 				encrypt = hyb_abe.encrypt(private, str(content), str(user.policy))
-				#print encrypt
+				print "The status update is:"
+				print content
+				print "--------------------------------------------"
+				print "Encrypted data, E is:"
+				print encrypt
 				encrypt_b = objectToBytes(encrypt, groupObj)
 				p = PostedData(p_id=int(p_id), status=encrypt_b)
 				p.save()
@@ -150,6 +155,15 @@ def authority(request):
 		if name and attr_list:
 			(private, master) = hyb_abe.setup()
 			decoder = hyb_abe.keygen(private, master, attr_list)
+			print "---------------------------------------------"
+			print "The Attribute List is:"
+			print attr_list
+			print "---------------------------------------------"
+			print "The public parameters PK are:"
+			print private
+			print "---------------------------------------------"
+			print "The private key D is:"
+			print decoder
 			decoder_b = objectToBytes(decoder, groupObj)
 			private_b = objectToBytes(private, groupObj)
 			try:
