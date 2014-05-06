@@ -11,7 +11,7 @@
 </head>
 <body>
 	<h3>Welcome, {{ name }}! Your ID number is {{ id }}. Use this to log in next time.</h3>
-	<p>You can post your status, or upload a photo. Remember, your data is super safe!<p>
+	<p>You can post your status here. Remember, your data is super safe!<p>
 	<p><a href="{% url 'index' %}">Back to home</a></p>
 	<br/><br/><br/>
 	{% if msg %}<p>{{ msg }}</p>{% endif %}

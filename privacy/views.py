@@ -79,6 +79,7 @@ def index(request):
 					policy_str += "(NOLOCATE)"
 
 				policy_str += ")"
+				print "-------------------------------------------------------"
 				print "The user policy is:"
 				print policy_str
 
@@ -106,13 +107,19 @@ def policy(request, p_id):
 			if auth:
 				private = bytesToObject(auth.p_key, groupObj)
 				decoder = bytesToObject(auth.d_key, groupObj)
-				print content, user.policy
 				encrypt = hyb_abe.encrypt(private, str(content), str(user.policy))
+				print "-----------------------------------------------------"
 				print "The status update is:"
 				print content
-				print "--------------------------------------------"
+				print "-----------------------------------------------------"
 				print "Encrypted data, E is:"
 				print encrypt
+				print "--------------------------"
+				print "And it is stored as:"
+				print objectToBytes(encrypt, groupObj)
+				print "-----------------------------------------------------"
+				print "The decryption key is:"
+				print decoder
 				encrypt_b = objectToBytes(encrypt, groupObj)
 				p = PostedData(p_id=int(p_id), status=encrypt_b)
 				p.save()
@@ -129,9 +136,7 @@ def policy(request, p_id):
 	if auth:
 		statuses = PostedData.objects.filter(p_id=int(p_id))
 		for s in statuses:
-			#print s.status
 			status_cipher = bytesToObject(s.status, groupObj)
-			#print status_cipher
 			private = bytesToObject(auth.p_key, groupObj)
 			decoder = bytesToObject(auth.d_key, groupObj)
 			try:
@@ -139,7 +144,6 @@ def policy(request, p_id):
 			except:
 				status_pair = ("Your status could not be displayed: this service does not support your privacy policy!", s.posted)
 			statuses_decrypted.append(status_pair)
-			print statuses_decrypted
 	if statuses_decrypted:
 		context = {'statuses': statuses_decrypted, 'id': p_id, 'name': user.name}
 	else:
