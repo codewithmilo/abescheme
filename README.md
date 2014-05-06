@@ -1,36 +1,23 @@
-Attribute-Based Encryption for Expressing Client Privacy Options
+privateBook: Encrypting User Data with Attribute-Based Encryption Using Privacy Policies
 
-**OLD, NEED TO UPDATE**
+Boston College Computer Science Senior Thesis,
+presented to the department April 5, 2014
 
-Accessible at [privatebook.herokuapp.com](http://privatebook.herokuapp.com)
+A draft can be found [here](http://cslab.bc.edu/~watanami/site/finalwriteup.pdf).
 
-Prototype: Social networking site with page profiles, options to upload info and status updates, and clients select specific sharing/privacy options. 
--	Collect and encrypt data with public keys with Javascript on page
--	Send AJAX request and send encrypted data to server
--	Use decryption key to decrypt data through PHP on server
--	Display to console the Attribute List with the client’s chosen options
--	Save decrypted data to database and create page for user
+Abstract:
 
-Privacy Options:
--	Who can see information: Advertisers/Service/No one
--	How long updates are shown: Month/Week/Day/Hour
--	Deleted info longevity: Forever/Never
--	Can use data for: Targeted Ads/Statistics/Partners/Nothing
--	Track Usage: Yes/No
--	GPS location: Yes/No
+As the internet and cloud services have pervaded our lives in nearly
+every aspect, one of the biggest issues facing the populace today is
+finding the best ways to protect our privacy. An important part of
+protection for the average user of a service is their privacy policy:
+essentially the only way today to let a client define how their data
+is used by the server. But often a client is not given a choice, and
+sometimes their policy is not even followed. We present here privateBook,
+a prototype for encrypting user data such that they first create a privacy 
+policy, and their data is protected from even the service unless their 
+privacy requirements are met by the service.
 
-1st Phase:
+Attribute-Based Encryption library provided by the [Charm crypto library](http://www.charm-crypto.com/Main.html).
 
-1.	Create simple form for signups - privacy policy and give ID#
-2.	Have a page for displaying profile info
-3.	Database for storing personal information - privacy policy
-4.	Client request for posting status or photo
-5.  Server updates stream of posts on user personal page 
-
-2nd Phase:
-
-1.	Implement proper encryption scheme with encryption/decryption
-2.	Store encrypted privacy data in database on creation
-4.	Server must decrypt (showing user policy) to retrieve requested data
-5.	Serve client requests after policy is presented to server
-
+privateBook web app built in Python with the Django web framework.
