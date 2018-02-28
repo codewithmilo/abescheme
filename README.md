@@ -3,7 +3,7 @@ privateBook: Encrypting User Data with Attribute-Based Encryption Using Privacy 
 Boston College Computer Science Senior Thesis,
 presented to the department April 5, 2014
 
-A draft can be found [here](http://cslab.bc.edu/~watanami/site/finalwriteup.pdf).
+The paper can be found [here](https://www.bc.edu/content/dam/files/schools/cas_sites/cs/pdf/academics/honors/14Watanabe.pdf).
 
 Abstract:
 
